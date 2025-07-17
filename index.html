@@ -21,6 +21,17 @@
     #loader { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; height: 100vh; font-size: 1.25rem; color: #f472b6; }
     #blurred-code { filter: blur(6px); transition: filter 1s ease-in-out; }
     #blurred-code.revealed { filter: blur(0); }
+    .tooltip:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      background-color: #111;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      top: -1.5rem;
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
   </style>
   <script>
     const allowedReferrer = "droplink.co";
@@ -94,6 +105,7 @@
         btn.innerText = "✅ Copied!";
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         setTimeout(() => btn.innerText = "📋 Copy Code", 2000);
+        document.getElementById("blurred-code").classList.add("revealed");
       });
     }
   </script>
@@ -108,20 +120,26 @@
   </div>
 
   <div class="text-center mb-6 fade-in">
-    <h1 class="text-4xl md:text-5xl font-bold text-pink-400 mb-3 animate-bounce">⏹️ 🎓 Canva Pro 1 MONTH (FREE ACCESS) 🎓</h1>
+    <h1 class="text-3xl md:text-5xl font-bold text-pink-400 mb-3 animate-bounce">🔹 Canva Pro 1 MONTH (FREE ACCESS) 🎓</h1>
     <p class="text-lg text-gray-300">You're only <span class="text-pink-400 font-semibold">ONE step away</span> from getting full Canva Pro access for FREE!</p>
   </div>
 
-  <div id="secret" class="hidden glass fade-in rounded-2xl p-8 shadow-2xl max-w-md w-full text-center">
+  <div id="secret" class="hidden glass fade-in rounded-2xl p-8 shadow-2xl max-w-md w-full text-center relative">
     <h2 class="text-3xl font-bold mb-4">✅ Verified Access</h2>
     <p class="text-lg mb-2">Your Secret Code is:</p>
-    <div id="blurred-code" class="bg-white text-black font-bold py-2 px-6 rounded-xl inline-block text-xl mb-4 shadow">
+    <div id="blurred-code" class="bg-white text-black font-bold py-2 px-6 rounded-xl inline-block text-xl mb-2 shadow relative">
       <span id="code-text">(Unlocking in <span id='countdown'>5</span>...)</span>
     </div>
-    <button onclick="copyCode()" id="copy-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition mb-4">
+    <p class="text-xs text-gray-400 mb-4">⏳ Auto-reveals in a few seconds...</p>
+    <button onclick="copyCode()" id="copy-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition mb-4 tooltip" data-tooltip="Click to copy the code!">
       📋 Copy Code
     </button>
-    <p class="text-sm text-gray-300 pt-2">Send this code with your Canva email to <a href="https://t.me/aenzBot" target="_blank" class="text-pink-400 underline">@aenzBot</a> 📬</p>
+    <div class="text-sm text-gray-200 pt-2">
+      <p class="mb-1">📸 Send a screenshot of this page</p>
+      <p class="mb-1">🔐 Along with this code & your Canva email</p>
+      <p class="mb-2">💌 To the bot 👇</p>
+      <a href="https://t.me/aenzBot" target="_blank" class="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 px-6 rounded-full inline-block mt-2 tooltip" data-tooltip="Click here to send on Telegram!">🚀 Send Now via @aenzBot</a>
+    </div>
   </div>
 
   <footer class="mt-8 text-center text-sm text-gray-500 fade-in">
