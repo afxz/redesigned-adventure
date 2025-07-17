@@ -26,10 +26,11 @@
     const allowedReferrer = "droplink.co";
     const redirectURL = "https://droplink.co/zK3dWTV";
 
-    async function getDailyCode() {
-      const res = await fetch("https://broad-glitter-74ad.supr.workers.dev/code");
-      const data = await res.json();
-      return data.code;
+    function getTodayCode(secret = "IAMSuperM234") {
+      const today = new Date().toISOString().split("T")[0];
+      const base = `${secret}-${today}`;
+      const hash = [...base].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      return "CNP-" + hash.toString(36).toUpperCase().slice(0, 6);
     }
 
     window.onload = async function () {
@@ -38,10 +39,9 @@
 
       if (window.location.pathname === "/admin") {
         const adminPass = urlParams.get("admin");
-        const res = await fetch(`https://broad-glitter-74ad.supr.workers.dev/admin?admin=${adminPass}`);
-        if (res.status === 200) {
-          const data = await res.json();
-          document.body.innerHTML = `<div class="text-center mt-32 text-white text-2xl">🛠️ Today's Code: <span class="font-bold text-pink-400">${data.code}</span></div>`;
+        if (adminPass === "IAMSuperM234") {
+          const code = getTodayCode(adminPass);
+          document.body.innerHTML = `<div class="text-center mt-32 text-white text-2xl">🛠️ Today's Code: <span class="font-bold text-pink-400">${code}</span></div>`;
         } else {
           document.body.innerHTML = `<div class="text-center mt-32 text-red-500 text-xl">🚫 Unauthorized</div>`;
         }
@@ -65,7 +65,7 @@
       const blurred = document.getElementById("blurred-code");
       loader.style.display = "flex";
 
-      const todayCode = await getDailyCode();
+      const todayCode = getTodayCode();
 
       setTimeout(() => {
         loader.style.display = "none";
