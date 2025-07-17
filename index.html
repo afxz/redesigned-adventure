@@ -63,6 +63,17 @@
       const referrer = document.referrer;
       const urlParams = new URLSearchParams(window.location.search);
 
+      // Admin Access Route
+      if (window.location.pathname === "/admin") {
+        const adminPass = urlParams.get("admin");
+        if (adminPass === "__ADMIN_PASS__") {
+          document.body.innerHTML = `<div class="text-center mt-32 text-white text-2xl">🛠️ Today's Code: <span class="font-bold text-pink-400">${todayCode}</span></div>`;
+        } else {
+          document.body.innerHTML = `<div class="text-center mt-32 text-red-500 text-xl">🚫 Unauthorized</div>`;
+        }
+        return;
+      }
+
       if (!referrer.includes(allowedReferrer) && !urlParams.has('allow')) {
         localStorage.removeItem('verified');
         document.body.innerHTML = `<div class='text-center text-white px-6 py-10'><h1 class='text-3xl font-bold text-red-500 mb-4'>🚨 You’ve Been Caught!</h1><p class='text-lg'>This page can only be accessed through the proper link.</p><p class='mt-2 text-pink-400'>Don’t try to bypass the system. Go back and use the Droplink URL properly 😤</p><p class='mt-6 text-gray-400 text-sm'>Redirecting you in 5 seconds...</p></div>`;
