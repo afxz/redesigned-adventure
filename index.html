@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verifying Access...</title>
+  <script>
+    const allowedReferrer = "droplink.co"; // Adjust this if you use a different shortener
+    const redirectURL = "https://droplink.co/YOUR-LINK-HERE"; // Replace with your real Droplink URL
+
+    window.onload = function () {
+      const referrer = document.referrer;
+      if (!referrer.includes(allowedReferrer)) {
+        window.location.href = redirectURL;
+      } else {
+        document.getElementById("secret").style.display = "block";
+      }
+    };
+  </script>
+</head>
+<body>
+  <div id="secret" style="display: none;">
+    <h2>✅ Verified!</h2>
+    <p>Your Secret Code is: <strong>SUNSETGLOW6969</strong></p>
+    <p>Send this code with your Canva email to get Pro access 💌</p>
+  </div>
+</body>
+</html>
