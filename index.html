@@ -13,49 +13,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-    }
-    ::selection {
-      background-color: #f472b6;
-      color: #000;
-    }
-    .glass {
-      background-color: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(20px);
-    }
-    .fade-in {
-      animation: fadeIn 1s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    #loader {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      height: 100vh;
-      font-size: 1.25rem;
-      color: #f472b6;
-    }
-    #blurred-code {
-      filter: blur(6px);
-      transition: filter 1s ease-in-out;
-    }
-    #blurred-code.revealed {
-      filter: blur(0);
-    }
+    body { font-family: 'Roboto', sans-serif; }
+    ::selection { background-color: #f472b6; color: #000; }
+    .glass { background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px); }
+    .fade-in { animation: fadeIn 1s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    #loader { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; height: 100vh; font-size: 1.25rem; color: #f472b6; }
+    #blurred-code { filter: blur(6px); transition: filter 1s ease-in-out; }
+    #blurred-code.revealed { filter: blur(0); }
   </style>
   <script>
     const allowedReferrer = "droplink.co";
     const redirectURL = "https://droplink.co/zK3dWTV";
 
     async function getDailyCode() {
-      const res = await fetch("https://canva-code-backend.YOUR_SUBDOMAIN.workers.dev/code");
+      const res = await fetch("https://broad-glitter-74ad.supr.workers.dev/code");
       const data = await res.json();
       return data.code;
     }
@@ -64,10 +36,9 @@
       const referrer = document.referrer;
       const urlParams = new URLSearchParams(window.location.search);
 
-      // Admin Access Route
       if (window.location.pathname === "/admin") {
         const adminPass = urlParams.get("admin");
-        const res = await fetch(`https://canva-code-backend.YOUR_SUBDOMAIN.workers.dev/admin?admin=${adminPass}`);
+        const res = await fetch(`https://broad-glitter-74ad.supr.workers.dev/admin?admin=${adminPass}`);
         if (res.status === 200) {
           const data = await res.json();
           document.body.innerHTML = `<div class="text-center mt-32 text-white text-2xl">🛠️ Today's Code: <span class="font-bold text-pink-400">${data.code}</span></div>`;
@@ -79,7 +50,7 @@
 
       if (!referrer.includes(allowedReferrer) && !urlParams.has('allow')) {
         localStorage.removeItem('verified');
-        document.body.innerHTML = `<div class='text-center text-white px-6 py-10'><h1 class='text-3xl font-bold text-red-500 mb-4'>🚨 You’ve Been Caught!</h1><p class='text-lg'>This page can only be accessed through the proper link.</p><p class='mt-2 text-pink-400'>Don’t try to bypass the system. Go back and use the Droplink URL properly 😤</p><p class='mt-6 text-gray-400 text-sm'>Redirecting you in 5 seconds...</p></div>`;
+        document.body.innerHTML = `<div class='text-center text-white px-6 py-10'><h1 class='text-3xl font-bold text-red-500 mb-4'>🚨 You’ve Been Caught!</h1><p class='text-lg'>This page can only be accessed through the proper link.</p><p class='mt-2 text-pink-400'>Don’t try to bypass the system. Go back and use the Droplink URL properly 🚤</p><p class='mt-6 text-gray-400 text-sm'>Redirecting you in 5 seconds...</p></div>`;
         setTimeout(() => { window.location.href = redirectURL; }, 5000);
         return;
       }
@@ -137,7 +108,7 @@
   </div>
 
   <div class="text-center mb-6 fade-in">
-    <h1 class="text-4xl md:text-5xl font-bold text-pink-400 mb-3 animate-bounce">⏩ 🆓 Canva Pro 1 MONTH (FREE ACCESS) 🆓</h1>
+    <h1 class="text-4xl md:text-5xl font-bold text-pink-400 mb-3 animate-bounce">⏹️ 🎓 Canva Pro 1 MONTH (FREE ACCESS) 🎓</h1>
     <p class="text-lg text-gray-300">You're only <span class="text-pink-400 font-semibold">ONE step away</span> from getting full Canva Pro access for FREE!</p>
   </div>
 
@@ -150,7 +121,7 @@
     <button onclick="copyCode()" id="copy-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition mb-4">
       📋 Copy Code
     </button>
-    <p class="text-sm text-gray-300">Send this code with your Canva email to <a href="https://t.me/aenzBot" target="_blank" class="text-pink-400 underline">@aenzBot</a> 💌</p>
+    <p class="text-sm text-gray-300 pt-2">Send this code with your Canva email to <a href="https://t.me/aenzBot" target="_blank" class="text-pink-400 underline">@aenzBot</a> 📬</p>
   </div>
 
   <footer class="mt-8 text-center text-sm text-gray-500 fade-in">
