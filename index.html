@@ -54,20 +54,23 @@
     const allowedReferrer = "droplink.co";
     const redirectURL = "https://droplink.co/zK3dWTV";
 
-    const codes = ["SUNSETGLOW6969", "PIXELFLAME420", "NEONTIGER1337", "GODMODE777"];
-    const today = new Date();
-    const codeIndex = today.getDate() % codes.length;
-    const todayCode = codes[codeIndex];
+    async function getDailyCode() {
+      const res = await fetch("https://canva-code-backend.YOUR_SUBDOMAIN.workers.dev/code");
+      const data = await res.json();
+      return data.code;
+    }
 
-    window.onload = function () {
+    window.onload = async function () {
       const referrer = document.referrer;
       const urlParams = new URLSearchParams(window.location.search);
 
       // Admin Access Route
       if (window.location.pathname === "/admin") {
         const adminPass = urlParams.get("admin");
-        if (adminPass === "__ADMIN_PASS__") {
-          document.body.innerHTML = `<div class="text-center mt-32 text-white text-2xl">🛠️ Today's Code: <span class="font-bold text-pink-400">${todayCode}</span></div>`;
+        const res = await fetch(`https://canva-code-backend.YOUR_SUBDOMAIN.workers.dev/admin?admin=${adminPass}`);
+        if (res.status === 200) {
+          const data = await res.json();
+          document.body.innerHTML = `<div class="text-center mt-32 text-white text-2xl">🛠️ Today's Code: <span class="font-bold text-pink-400">${data.code}</span></div>`;
         } else {
           document.body.innerHTML = `<div class="text-center mt-32 text-red-500 text-xl">🚫 Unauthorized</div>`;
         }
@@ -90,6 +93,8 @@
       const codeSpan = document.getElementById("code-text");
       const blurred = document.getElementById("blurred-code");
       loader.style.display = "flex";
+
+      const todayCode = await getDailyCode();
 
       setTimeout(() => {
         loader.style.display = "none";
