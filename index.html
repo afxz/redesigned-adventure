@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Verifying Access...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧠 Only Smart People Get In</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+    ::selection {
+      background-color: #f472b6;
+      color: #000;
+    }
+    .glass {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+    }
+  </style>
   <script>
-    const allowedReferrer = "droplink.co"; // Adjust this if you use a different shortener
-    const redirectURL = "https://droplink.co/YOUR-LINK-HERE"; // Replace with your real Droplink URL
+    const allowedReferrer = "droplink.co";
+    const redirectURL = "https://droplink.co/YOUR-LINK-HERE"; // replace with your real link
+
+    const codes = ["SUNSETGLOW6969", "PIXELFLAME420", "NEONTIGER1337", "GODMODE777"];
+    const today = new Date();
+    const codeIndex = today.getDate() % codes.length;
+    const todayCode = codes[codeIndex];
 
     window.onload = function () {
       const referrer = document.referrer;
@@ -12,15 +35,32 @@
         window.location.href = redirectURL;
       } else {
         document.getElementById("secret").style.display = "block";
+        document.getElementById("code-text").innerText = todayCode;
       }
     };
+
+    function copyCode() {
+      const code = document.getElementById("code-text").innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById("copy-btn");
+        btn.innerText = "✅ Copied!";
+        setTimeout(() => btn.innerText = "📋 Copy Code", 2000);
+      });
+    }
   </script>
 </head>
-<body>
-  <div id="secret" style="display: none;">
-    <h2>✅ Verified!</h2>
-    <p>Your Secret Code is: <strong>SUNSETGLOW6969</strong></p>
-    <p>Send this code with your Canva email to get Pro access 💌</p>
+<body class="bg-gradient-to-tr from-gray-950 via-gray-900 to-gray-800 text-white min-h-screen flex items-center justify-center">
+  <div id="secret" class="hidden glass rounded-2xl p-8 shadow-2xl max-w-md text-center">
+    <h2 class="text-3xl font-bold mb-4">✅ Verified Access</h2>
+    <p class="text-lg mb-2">Your Secret Code is:</p>
+    <div class="bg-white text-black font-bold py-2 px-6 rounded-xl inline-block text-xl mb-4 shadow">
+      <span id="code-text"></span>
+    </div>
+    <br />
+    <button onclick="copyCode()" id="copy-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition">
+      📋 Copy Code
+    </button>
+    <p class="text-sm text-gray-300 mt-4">Send this code with your Canva email to unlock Pro Access 💌</p>
   </div>
 </body>
 </html>
