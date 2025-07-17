@@ -6,6 +6,7 @@
   <title>🧠 Only Smart People Get In</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -19,6 +20,23 @@
       border: 1px solid rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(20px);
     }
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 100vh;
+      font-size: 1.25rem;
+      color: #f472b6;
+    }
   </style>
   <script>
     const allowedReferrer = "droplink.co";
@@ -31,12 +49,23 @@
 
     window.onload = function () {
       const referrer = document.referrer;
-      if (!referrer.includes(allowedReferrer)) {
-        window.location.href = redirectURL;
-      } else {
-        document.getElementById("secret").style.display = "block";
-        document.getElementById("code-text").innerText = todayCode;
+      const urlParams = new URLSearchParams(window.location.search);
+
+      if (!referrer.includes(allowedReferrer) && !urlParams.has('allow')) {
+        document.body.innerHTML = `<div class='text-center text-white px-6 py-10'><h1 class='text-3xl font-bold text-red-500 mb-4'>🚨 You’ve Been Caught!</h1><p class='text-lg'>This page can only be accessed through the proper link.</p><p class='mt-2 text-pink-400'>Don’t try to bypass the system. Go back and use the Droplink URL properly 😤</p><p class='mt-6 text-gray-400 text-sm'>Redirecting you in 5 seconds...</p></div>`;
+        setTimeout(() => { window.location.href = redirectURL; }, 5000);
+        return;
       }
+
+      const loader = document.getElementById("loader");
+      const secret = document.getElementById("secret");
+      loader.style.display = "flex";
+
+      setTimeout(() => {
+        loader.style.display = "none";
+        secret.style.display = "block";
+        document.getElementById("code-text").innerText = todayCode;
+      }, 2500);
     };
 
     function copyCode() {
@@ -44,23 +73,44 @@
       navigator.clipboard.writeText(code).then(() => {
         const btn = document.getElementById("copy-btn");
         btn.innerText = "✅ Copied!";
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
         setTimeout(() => btn.innerText = "📋 Copy Code", 2000);
       });
     }
   </script>
 </head>
-<body class="bg-gradient-to-tr from-gray-950 via-gray-900 to-gray-800 text-white min-h-screen flex items-center justify-center">
-  <div id="secret" class="hidden glass rounded-2xl p-8 shadow-2xl max-w-md text-center">
+<body class="bg-gradient-to-tr from-gray-950 via-gray-900 to-gray-800 text-white min-h-screen flex flex-col items-center justify-center px-4">
+  <div id="loader" class="hidden">
+    <svg class="animate-spin h-10 w-10 text-pink-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+    </svg>
+    <p>Verifying access...</p>
+  </div>
+
+  <div class="text-center mb-6 fade-in">
+    <h1 class="text-4xl md:text-5xl font-bold text-pink-400 mb-3 animate-bounce">⏩ 🆓 Canva Pro 1 MONTH (FREE ACCESS) 🆓</h1>
+    <p class="text-lg text-gray-300">You're only <span class="text-pink-400 font-semibold">ONE step away</span> from getting full Canva Pro access for FREE!</p>
+  </div>
+
+  <div id="secret" class="hidden glass fade-in rounded-2xl p-8 shadow-2xl max-w-md w-full text-center">
     <h2 class="text-3xl font-bold mb-4">✅ Verified Access</h2>
     <p class="text-lg mb-2">Your Secret Code is:</p>
     <div class="bg-white text-black font-bold py-2 px-6 rounded-xl inline-block text-xl mb-4 shadow">
       <span id="code-text"></span>
     </div>
-    <br />
-    <button onclick="copyCode()" id="copy-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition">
+    <button onclick="copyCode()" id="copy-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition mb-4">
       📋 Copy Code
     </button>
-    <p class="text-sm text-gray-300 mt-4">Send this code with your Canva email to unlock Pro Access 💌</p>
+    <p class="text-sm text-gray-300">Send this code with your Canva email to unlock Pro Access 💌</p>
   </div>
+
+  <footer class="mt-8 text-center text-sm text-gray-500 fade-in">
+    Made with ❤️ by <a href="https://t.me/CanvaProInviteLinks" target="_blank" class="text-pink-400 hover:underline">@CanvaProInviteLinks</a>
+  </footer>
 </body>
 </html>
