@@ -42,6 +42,13 @@
       font-size: 1.25rem;
       color: #f472b6;
     }
+    #blurred-code {
+      filter: blur(6px);
+      transition: filter 1s ease-in-out;
+    }
+    #blurred-code.revealed {
+      filter: blur(0);
+    }
   </style>
   <script>
     const allowedReferrer = "droplink.co";
@@ -57,19 +64,39 @@
       const urlParams = new URLSearchParams(window.location.search);
 
       if (!referrer.includes(allowedReferrer) && !urlParams.has('allow')) {
+        localStorage.removeItem('verified');
         document.body.innerHTML = `<div class='text-center text-white px-6 py-10'><h1 class='text-3xl font-bold text-red-500 mb-4'>🚨 You’ve Been Caught!</h1><p class='text-lg'>This page can only be accessed through the proper link.</p><p class='mt-2 text-pink-400'>Don’t try to bypass the system. Go back and use the Droplink URL properly 😤</p><p class='mt-6 text-gray-400 text-sm'>Redirecting you in 5 seconds...</p></div>`;
         setTimeout(() => { window.location.href = redirectURL; }, 5000);
         return;
       }
 
+      if (!localStorage.getItem('verified')) {
+        localStorage.setItem('verified', 'true');
+      }
+
       const loader = document.getElementById("loader");
       const secret = document.getElementById("secret");
+      const codeSpan = document.getElementById("code-text");
+      const blurred = document.getElementById("blurred-code");
       loader.style.display = "flex";
 
       setTimeout(() => {
         loader.style.display = "none";
         secret.style.display = "block";
-        document.getElementById("code-text").innerText = todayCode;
+
+        let countdown = 5;
+        const countdownEl = document.getElementById("countdown");
+        countdownEl.innerText = countdown;
+
+        const countdownInterval = setInterval(() => {
+          countdown--;
+          countdownEl.innerText = countdown;
+          if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            blurred.classList.add("revealed");
+            codeSpan.innerText = todayCode;
+          }
+        }, 1000);
       }, 2500);
     };
 
@@ -78,11 +105,7 @@
       navigator.clipboard.writeText(code).then(() => {
         const btn = document.getElementById("copy-btn");
         btn.innerText = "✅ Copied!";
-        confetti({
-          particleCount: 150,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         setTimeout(() => btn.innerText = "📋 Copy Code", 2000);
       });
     }
@@ -105,13 +128,13 @@
   <div id="secret" class="hidden glass fade-in rounded-2xl p-8 shadow-2xl max-w-md w-full text-center">
     <h2 class="text-3xl font-bold mb-4">✅ Verified Access</h2>
     <p class="text-lg mb-2">Your Secret Code is:</p>
-    <div class="bg-white text-black font-bold py-2 px-6 rounded-xl inline-block text-xl mb-4 shadow">
-      <span id="code-text"></span>
+    <div id="blurred-code" class="bg-white text-black font-bold py-2 px-6 rounded-xl inline-block text-xl mb-4 shadow">
+      <span id="code-text">(Unlocking in <span id='countdown'>5</span>...)</span>
     </div>
     <button onclick="copyCode()" id="copy-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition mb-4">
       📋 Copy Code
     </button>
-    <p class="text-sm text-gray-300">Send this code with your Canva email to unlock Pro Access 💌</p>
+    <p class="text-sm text-gray-300">Send this code with your Canva email to <a href="https://t.me/aenzBot" target="_blank" class="text-pink-400 underline">@aenzBot</a> 💌</p>
   </div>
 
   <footer class="mt-8 text-center text-sm text-gray-500 fade-in">
